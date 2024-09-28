@@ -1,0 +1,13 @@
+/* static/attendance/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+h1, h2 {
+    color: #333;
+}

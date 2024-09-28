@@ -1,0 +1,14 @@
+{% extends 'attendance/base.html' %}
+{% block title %}Manage Classes{% endblock %}
+{% block content %}
+<h2>Manage Classes</h2>
+<a href="{% url 'class_create' %}">Create Class</a>
+<ul>
+    {% for class in object_list %}
+        <li>{{ class.course.name }} ({{ class.semester.name }}) - Class {{ class.number }}
+            <a href="{% url 'class_update' class.pk %}">Edit</a> |
+            <a href="{% url 'class_delete' class.pk %}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

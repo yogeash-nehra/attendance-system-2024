@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Attendance System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% if user.is_superuser %}
+                        <li><a href="{% url 'semester_list' %}">Manage Semesters</a></li>
+                        <li><a href="{% url 'course_list' %}">Manage Courses</a></li>
+                        <li><a href="{% url 'class_list' %}">Manage Classes</a></li>
+                    {% elif user.groups.filter(name="Lecturers").exists %}
+                        <li><a href="{% url 'lecturer_login' %}">Enter Attendance</a></li>
+                    {% else %}
+                        <li><a href="{% url 'view_attendance' %}">View Attendance</a></li>
+                    {% endif %}
+                {% else %}
+                    <li><a href="{% url 'admin_login' %}">Admin Login</a></li>
+                    <li><a href="{% url 'lecturer_login' %}">Lecturer Login</a></li>
+                    <li><a href="{% url 'student_login' %}">Student Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

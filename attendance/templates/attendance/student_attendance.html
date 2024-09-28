@@ -1,0 +1,27 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}View Attendance{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h2>Your Attendance</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in attendance_records %}
+        <tr>
+            <td>{{ record.date }}</td>
+            <td>{{ record.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>You need to be logged in to view this page.</p>
+{% endif %}
+{% endblock %}

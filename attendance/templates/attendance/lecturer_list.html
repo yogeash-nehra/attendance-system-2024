@@ -1,0 +1,29 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Lecturer List{% endblock %}
+
+{% block content %}
+<h2>Lecturers</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lecturer in object_list %}
+            <tr>
+                <td>{{ lecturer.staff_id }}</td>
+                <td>{{ lecturer.full_name }}</td>
+                <td>
+                    <a href="{% url 'lecturer_update' lecturer.id %}">Edit</a> |
+                    <a href="{% url 'lecturer_delete' lecturer.id %}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'lecturer_create' %}">Add New Lecturer</a>
+{% endblock %}

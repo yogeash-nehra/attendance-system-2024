@@ -1,0 +1,36 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Enter Attendance{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h2>Enter Attendance</h2>
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in enrolled_students %}
+            <tr>
+                <td>{{ student.student.full_name }}</td>
+                <td>
+                    <select name="attendance_{{ student.id }}">
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Submit Attendance</button>
+</form>
+{% else %}
+<p>You need to be logged in to view this page.</p>
+{% endif %}
+{% endblock %}

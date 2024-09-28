@@ -1,0 +1,16 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}{% if view.object %}Update{% else %}Create{% endif %} Course{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h2>{% if view.object %}Update{% else %}Create{% endif %} Course</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% if view.object %}Update{% else %}Create{% endif %}</button>
+</form>
+{% else %}
+<p>You need to be logged in to view this page.</p>
+{% endif %}
+{% endblock %}

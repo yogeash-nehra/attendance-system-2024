@@ -1,0 +1,13 @@
+{% extends 'attendance/base.html' %}
+{% block title %}Manage Enrollments{% endblock %}
+{% block content %}
+<h2>Manage Enrollments</h2>
+<a href="{% url 'enrollment_create' %}">Enroll Student</a>
+<ul>
+    {% for enrollment in object_list %}
+        <li>{{ enrollment.student.full_name }} - {{ enrollment.enrolled_class.course.name }} (Class {{ enrollment.enrolled_class.number }})
+            <a href="{% url 'enrollment_delete' enrollment.pk %}">Remove Enrollment</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

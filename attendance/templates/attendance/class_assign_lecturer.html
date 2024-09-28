@@ -1,0 +1,19 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Assign Lecturer to Class{% endblock %}
+
+{% block content %}
+<h2>Assign Lecturer to Class {{ object.number }}</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="lecturer">Lecturer:</label>
+    <select id="lecturer" name="lecturer">
+        {% for lecturer in lecturers %}
+            <option value="{{ lecturer.id }}" {% if lecturer == object.lecturer %}selected{% endif %}>
+                {{ lecturer.full_name }}
+            </option>
+        {% endfor %}
+    </select>
+    <button type="submit">Assign</button>
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}View Attendance{% endblock %}
+
+{% block content %}
+<h2>Attendance Records</h2>
+<ul>
+    {% for record in attendance_records %}
+    <li>{{ record.student }} - {{ record.status }} on {{ record.date }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

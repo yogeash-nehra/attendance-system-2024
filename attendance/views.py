@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -11,31 +11,50 @@ from .models import Semester, Course, Class, Lecturer, Student, Enrollment, Atte
 import pandas as pd
 
 # Home view
+@login_required
 def home(request):
-    return render(request, 'attendance/home.html')
+    is_lecturer = request.user.groups.filter(name="Lecturers").exists()
+    is_student = request.user.groups.filter(name="Students").exists()
+    is_admin = request.user.is_superuser
+    return render(request, 'attendance/home.html', {
+        'is_lecturer': is_lecturer,
+        'is_student': is_student,
+        'is_admin': is_admin,
+    })
 
-# Administrator Login View
+# Custom Admin login view
 class AdminLoginView(LoginView):
     template_name = 'attendance/admin_login.html'
+    redirect_authenticated_user = True  # Redirects if the user is already authenticated
 
-
-# Lecturer Login View
-class LecturerLoginView(LoginRequiredMixin, LoginView):
+# Custom Lecturer login view
+class LecturerLoginView(LoginView):
     template_name = 'attendance/lecturer_login.html'
-    login_url = 'lecturer_login'
+    redirect_authenticated_user = True
 
-
-# Student Login View
-class StudentLoginView(LoginRequiredMixin, LoginView):
+# Custom Student login view
+class StudentLoginView(LoginView):
     template_name = 'attendance/student_login.html'
-    login_url = 'student_login'
+    redirect_authenticated_user = True
+
+# Custom General login view for other users
+class CustomLoginView(LoginView):
+    template_name = 'attendance/login.html'
+    redirect_authenticated_user = True
+
+# Redirect user after login
+def login_redirect(request):
+    return redirect('home')  # After successful login, redirect to home page
+
+# Logout view
+class CustomLogoutView(LogoutView):
+    next_page = 'home'  # Redirect to home after logout
 
 
-# Administrator CRUD for Semesters
+# Semester CRUD views
 class SemesterListView(LoginRequiredMixin, ListView):
     model = Semester
     template_name = 'attendance/semester_list.html'
-    login_url = 'admin_login'
 
 
 class SemesterCreateView(LoginRequiredMixin, CreateView):
@@ -43,7 +62,6 @@ class SemesterCreateView(LoginRequiredMixin, CreateView):
     fields = ['year', 'name', 'start_date', 'end_date']
     template_name = 'attendance/semester_form.html'
     success_url = reverse_lazy('semester_list')
-    login_url = 'admin_login'
 
 
 class SemesterUpdateView(LoginRequiredMixin, UpdateView):
@@ -51,14 +69,12 @@ class SemesterUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['year', 'name', 'start_date', 'end_date']
     template_name = 'attendance/semester_form.html'
     success_url = reverse_lazy('semester_list')
-    login_url = 'admin_login'
 
 
 class SemesterDeleteView(LoginRequiredMixin, DeleteView):
     model = Semester
     template_name = 'attendance/semester_confirm_delete.html'
     success_url = reverse_lazy('semester_list')
-    login_url = 'admin_login'
 
 
 # Administrator CRUD for Courses

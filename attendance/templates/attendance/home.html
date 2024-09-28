@@ -1,6 +1,29 @@
 {% extends 'attendance/base.html' %}
 
+{% block title %}Home{% endblock %}
+
 {% block content %}
-  <h2>Welcome to the Attendance System</h2>
-  <p>This is the home page.</p>
+    <h1>Welcome to the Attendance System</h1>
+    {% if is_admin %}
+        <p>You are logged in as an Administrator.</p>
+        <ul>
+            <li><a href="{% url 'semester_list' %}">Manage Semesters</a></li>
+            <li><a href="{% url 'course_list' %}">Manage Courses</a></li>
+            <li><a href="{% url 'class_list' %}">Manage Classes</a></li>
+            <li><a href="{% url 'lecturer_list' %}">Manage Lecturers</a></li>
+            <li><a href="{% url 'student_list' %}">Manage Students</a></li>
+        </ul>
+    {% elif is_lecturer %}
+        <p>You are logged in as a Lecturer.</p>
+        <ul>
+            <li><a href="{% url 'enter_attendance' class_id=1 %}">Enter Attendance</a></li>
+        </ul>
+    {% elif is_student %}
+        <p>You are logged in as a Student.</p>
+        <ul>
+            <li><a href="{% url 'view_attendance' %}">View Attendance</a></li>
+        </ul>
+    {% else %}
+        <p>Welcome Guest !</p>
+    {% endif %}
 {% endblock %}

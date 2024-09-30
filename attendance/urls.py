@@ -16,6 +16,13 @@ urlpatterns = [
     # Student Login
     path('student/login/', views.StudentLoginView.as_view(), name='student_login'),
 
+    # Override default login view with a custom template
+    path('login/', auth_views.LoginView.as_view(template_name='attendance/login.html'), name='login'),
+
+    # Logout view
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
+
     # Semester CRUD
     path('semesters/', views.SemesterListView.as_view(), name='semester_list'),
     path('semesters/create/', views.SemesterCreateView.as_view(), name='semester_create'),

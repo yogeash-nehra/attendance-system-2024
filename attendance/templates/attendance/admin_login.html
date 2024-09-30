@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Admin Login</h2>
-<form method="POST">
+<form method="POST" action="{% url 'admin_login' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>

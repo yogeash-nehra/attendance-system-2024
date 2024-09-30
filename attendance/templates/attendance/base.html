@@ -25,7 +25,9 @@
                         <li><a href="{% url 'lecturer_list' %}">Manage Lecturers</a></li>
                         <li><a href="{% url 'student_list' %}">Manage Students</a></li>
                     {% elif is_lecturer %}
-                        <li><a href="{% url 'enter_attendance' %}">Enter Attendance</a></li>
+
+                        <a href="{% url 'enter_attendance' class.id %}">Enter Attendance</a>
+
                     {% elif is_student %}
                         <li><a href="{% url 'view_attendance' %}">View Attendance</a></li>
                     {% endif %}

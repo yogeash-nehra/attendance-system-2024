@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import Semester, Course, Class, Lecturer, Student, Enrollment, Attendance
 import pandas as pd
-
+from django.contrib.auth import logout
 # Home view
 @login_required
 def home(request):
@@ -30,11 +30,18 @@ class AdminLoginView(LoginView):
 # Custom Lecturer login view
 class LecturerLoginView(LoginView):
     template_name = 'attendance/lecturer_login.html'
-    redirect_authenticated_user = True
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            # Log out the user if already logged in
+            logout(request)
+        return super().dispatch(request, *args, **kwargs)
+
 
 # Custom Student login view
 class StudentLoginView(LoginView):
     template_name = 'attendance/student_login.html'
+    success_url = reverse_lazy('home')
     redirect_authenticated_user = True
 
 # Custom General login view for other users
